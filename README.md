@@ -1,0 +1,2 @@
+# ForgeModTemplate
+Forge modding template.

@@ -20,14 +20,14 @@
     },
     "thirdperson_lefthand": {
       "rotation": [
-        66.25,
-        4.47,
-        -179.95
+        156.8,
+        18.72,
+        3.96
       ],
       "translation": [
-        -0.25,
-        9.5,
-        9.25
+        -4,
+        15.25,
+        0
       ]
     },
     "firstperson_righthand": {

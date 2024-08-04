@@ -17,7 +17,6 @@ public class HandcuffItem extends Item implements IAnimatable {
 
     public final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-    private boolean handCuffed;
     private boolean open;
 
     public HandcuffItem() {
@@ -29,7 +28,6 @@ public class HandcuffItem extends Item implements IAnimatable {
                 return this.renderer;
             }
         }));
-        handCuffed = false;
         open = false;
     }
 
@@ -53,6 +51,8 @@ public class HandcuffItem extends Item implements IAnimatable {
         return this.factory;
     }
 
-
+    public void setOpen(boolean open) {
+        this.open = open;
+    }
 
 }

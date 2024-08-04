@@ -7,6 +7,13 @@
   },
   "refmap": "mixins.handcuffs.refmap.json",
   "mixins": [
-    "entity.ServerPlayerEntityMixin"
+    "server.entity.PlayerEntityMixin",
+    "server.entity.ServerPlayerEntityMixin",
+    "server.inventory.PlayerInventoryMixin"
+  ],
+  "client": [
+    "client.MinecraftMixin",
+    "client.container.ContainerScreenMixin",
+    "client.entity.ClientPlayerEntityMixin"
   ]
 }

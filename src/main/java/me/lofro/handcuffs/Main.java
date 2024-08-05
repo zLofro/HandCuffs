@@ -1,6 +1,7 @@
 package me.lofro.handcuffs;
 
 import me.lofro.handcuffs.items.ModItems;
+import me.lofro.handcuffs.networking.ModPacketHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
@@ -29,6 +30,8 @@ public class Main {
 
     public Main() {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        ModPacketHandler.register();
 
         ModItems.register(eventBus);
 

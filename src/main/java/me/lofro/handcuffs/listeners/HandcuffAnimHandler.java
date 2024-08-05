@@ -25,21 +25,21 @@ public class HandcuffAnimHandler {
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         PlayerEntity player = event.player;
-        if (player.isServerWorld()) return;
+        if (!player.isServerWorld()) {
+            ModifierLayer<IAnimation> handcuffAnimation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData((AbstractClientPlayerEntity) player).get(new ResourceLocation(Main.MOD_ID, "player_animation"));
 
-        ModifierLayer<IAnimation> handcuffAnimation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData((AbstractClientPlayerEntity) player).get(new ResourceLocation(Main.MOD_ID, "player_animation"));
+            if (ModItems.HANDCUFFS.get().equals(player.getItemStackFromSlot(EquipmentSlotType.OFFHAND).getItem())) {
+                if (handcuffAnimation != null && !handcuffAnimation.isActive()) {
 
-        if (ModItems.HANDCUFFS.get().equals(player.getItemStackFromSlot(EquipmentSlotType.OFFHAND).getItem())) {
-            if (handcuffAnimation != null && !handcuffAnimation.isActive()) {
+                    KeyframeAnimation animationPlayer = PlayerAnimationRegistry.getAnimation(new ResourceLocation(Main.MOD_ID, "handcuffs"));
 
-                KeyframeAnimation animationPlayer = PlayerAnimationRegistry.getAnimation(new ResourceLocation(Main.MOD_ID, "handcuffs"));
+                    if (animationPlayer == null) return;
 
-                if (animationPlayer == null) return;
-
-                handcuffAnimation.setAnimation(new KeyframeAnimationPlayer(animationPlayer));
+                    handcuffAnimation.setAnimation(new KeyframeAnimationPlayer(animationPlayer));
+                }
+            } else if (handcuffAnimation != null && handcuffAnimation.isActive()) {
+                handcuffAnimation.setAnimation(null);
             }
-        } else if (handcuffAnimation != null && handcuffAnimation.isActive()) {
-            handcuffAnimation.setAnimation(null);
         }
     }
 

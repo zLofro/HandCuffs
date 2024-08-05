@@ -11,7 +11,7 @@ public class ModItems {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Main.MOD_ID);
 
-    public static final RegistryObject<Item> HANDCUFFS = ITEMS.register("handcuffs", HandcuffItem::new);
+    public static final RegistryObject<Item> HANDCUFFS = ITEMS.register("handcuffs", HandcuffsItem::new);
     public static final RegistryObject<Item> KEY = ITEMS.register("key", KeyItem::new);
 
     public static void register(IEventBus eventBus) {

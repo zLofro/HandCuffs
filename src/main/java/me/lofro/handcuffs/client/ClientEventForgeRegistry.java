@@ -48,7 +48,7 @@ public class ClientEventForgeRegistry {
         }
     }
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public static void onRawMouse(InputEvent.RawMouseEvent event) {
         PlayerEntity player = Minecraft.getInstance().player;
 
@@ -57,6 +57,6 @@ public class ClientEventForgeRegistry {
         if (ModItems.HANDCUFFS.get().equals(player.getItemStackFromSlot(EquipmentSlotType.OFFHAND).getItem())) {
             event.setCanceled(true);
         }
-    }
+    }*/
 
 }

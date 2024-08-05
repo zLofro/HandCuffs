@@ -1,7 +1,7 @@
 package me.lofro.handcuffs.listeners;
 
 import me.lofro.handcuffs.Main;
-import me.lofro.handcuffs.items.HandcuffItem;
+import me.lofro.handcuffs.items.HandcuffsItem;
 import me.lofro.handcuffs.items.ModItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,7 +29,7 @@ public class ForgeBusEvents {
         Item item = event.getItemStack().getItem();
         Entity clickedEntity = event.getTarget();
 
-        if (item instanceof HandcuffItem) {
+        if (item instanceof HandcuffsItem) {
             if (clickedEntity instanceof ServerPlayerEntity) {
                 ServerPlayerEntity clickedPlayer = (ServerPlayerEntity) clickedEntity;
 
@@ -39,26 +39,27 @@ public class ForgeBusEvents {
 
                 clickedPlayer.setItemStackToSlot(EquipmentSlotType.OFFHAND, event.getItemStack().copy());
 
-                if (player.getItemStackFromSlot(EquipmentSlotType.MAINHAND).getItem() instanceof HandcuffItem) {
+                if (player.getItemStackFromSlot(EquipmentSlotType.MAINHAND).getItem() instanceof HandcuffsItem) {
                     player.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.AIR));
-                } else if (player.getItemStackFromSlot(EquipmentSlotType.OFFHAND).getItem() instanceof HandcuffItem) {
+                } else if (player.getItemStackFromSlot(EquipmentSlotType.OFFHAND).getItem() instanceof HandcuffsItem) {
                     player.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.AIR));
                 }
             }
         }
 
-        if (clickedEntity instanceof ServerPlayerEntity) {
-            ServerPlayerEntity clickedPlayer = (ServerPlayerEntity) clickedEntity;
+        if (clickedEntity instanceof PlayerEntity) {
+            PlayerEntity clickedPlayer = (PlayerEntity) clickedEntity;
 
             if (ModItems.KEY.get().equals(item)) {
                 if (ModItems.HANDCUFFS.get().equals(clickedPlayer.getItemStackFromSlot(EquipmentSlotType.OFFHAND).getItem())) {
 
-                    HandcuffItem handcuffItem = (HandcuffItem) clickedPlayer.getItemStackFromSlot(EquipmentSlotType.OFFHAND).getItem();
-                    handcuffItem.setOpen(true);
-
                     clickedPlayer.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.AIR));
 
                     player.addItemStackToInventory(new ItemStack(ModItems.HANDCUFFS.get()));
+                }
+            } else if (Items.LEAD.equals(item)) {
+                if (ModItems.HANDCUFFS.get().equals(clickedPlayer.getItemStackFromSlot(EquipmentSlotType.OFFHAND).getItem())) {
+
                 }
             }
         }

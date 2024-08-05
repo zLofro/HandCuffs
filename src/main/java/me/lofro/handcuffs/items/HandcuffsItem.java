@@ -13,13 +13,11 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.concurrent.Callable;
 
-public class HandcuffItem extends Item implements IAnimatable {
+public class HandcuffsItem extends Item implements IAnimatable {
 
     public final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-    private boolean open;
-
-    public HandcuffItem() {
+    public HandcuffsItem() {
         super(new Properties().setISTER(() -> new Callable() {
             private final HandcuffItemRenderer renderer = new HandcuffItemRenderer();
 
@@ -28,7 +26,6 @@ public class HandcuffItem extends Item implements IAnimatable {
                 return this.renderer;
             }
         }));
-        open = false;
     }
 
     @Override
@@ -37,11 +34,7 @@ public class HandcuffItem extends Item implements IAnimatable {
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (open) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("open"));
-        } else {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("close"));
-        }
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("close"));
 
         return PlayState.CONTINUE;
     }
@@ -49,10 +42,6 @@ public class HandcuffItem extends Item implements IAnimatable {
     @Override
     public AnimationFactory getFactory() {
         return this.factory;
-    }
-
-    public void setOpen(boolean open) {
-        this.open = open;
     }
 
 }

@@ -45,7 +45,7 @@ public class LinkCommand {
 
         source.sendFeedback(new StringTextComponent("Has linkeado a los jugadores."), false);
 
-        LinkManager.link(firstPlayer.getUniqueID(), secondPlayer.getUniqueID());
+        LinkManager.link(firstPlayer, secondPlayer);
 
         return Command.SINGLE_SUCCESS;
     }
@@ -64,7 +64,7 @@ public class LinkCommand {
             return 0;
         }
 
-        LinkManager.unLink(playerEntity.getUniqueID());
+        LinkManager.unLink(playerEntity, playerEntity.getEntityWorld());
 
         source.sendFeedback(new StringTextComponent("Has deslinkeado al jugador."), false);
 

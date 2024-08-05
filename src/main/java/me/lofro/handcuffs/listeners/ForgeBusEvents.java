@@ -13,7 +13,6 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.LeadItem;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -77,12 +76,12 @@ public class ForgeBusEvents {
                     }
 
                     if (linkedList.containsKey(clickedPlayer.getUniqueID()) || linkedList.containsValue(clickedPlayer.getUniqueID())) {
-                        LinkManager.unLink(clickedPlayer.getUniqueID());
+                        LinkManager.unLink(clickedPlayer, clickedPlayer.getEntityWorld());
 
                         return;
                     }
 
-                    leadItemAccessor.addInteracted$0(clickedPlayer.getUniqueID());
+                    leadItemAccessor.addInteracted$0(clickedPlayer.getUniqueID(), player.getEntityWorld());
                 }
             }
         }

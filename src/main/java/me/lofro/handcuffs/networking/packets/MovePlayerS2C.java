@@ -1,6 +1,5 @@
 package me.lofro.handcuffs.networking.packets;
 
-import me.lofro.handcuffs.Main;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerEntity;

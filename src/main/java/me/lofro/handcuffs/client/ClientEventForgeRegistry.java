@@ -44,6 +44,7 @@ public class ClientEventForgeRegistry {
         if (player == null) return;
 
         if (ModItems.HANDCUFFS.get().equals(player.getItemStackFromSlot(EquipmentSlotType.OFFHAND).getItem())) {
+            if (event.getGui().isPauseScreen()) return;
             event.setCanceled(true);
         }
     }

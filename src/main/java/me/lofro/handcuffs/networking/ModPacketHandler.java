@@ -1,6 +1,7 @@
 package me.lofro.handcuffs.networking;
 
 import me.lofro.handcuffs.Main;
+import me.lofro.handcuffs.networking.packets.LinkPlayersS2C;
 import me.lofro.handcuffs.networking.packets.MovePlayerS2C;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -30,6 +31,12 @@ public class ModPacketHandler {
                 .encoder(MovePlayerS2C::toBytes)
                 .consumer(MovePlayerS2C::handle)
                 .add();
+
+        INSTANCE.messageBuilder(LinkPlayersS2C.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(LinkPlayersS2C::new)
+                .encoder(LinkPlayersS2C::toBytes)
+                .consumer(LinkPlayersS2C::handle)
+                .add();
     }
 
     public static <TPacket> void sendToPlayer(ServerPlayerEntity serverPlayer, TPacket message) {
@@ -38,6 +45,10 @@ public class ModPacketHandler {
         if (target == null) return;
 
         INSTANCE.send(target, message);
+    }
+
+    public static <TPacket> void sendToAllClients(TPacket message) {
+        INSTANCE.send(PacketDistributor.ALL.noArg(), message);
     }
 
 }

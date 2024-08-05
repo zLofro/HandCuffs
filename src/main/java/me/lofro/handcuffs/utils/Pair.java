@@ -42,7 +42,7 @@ public class Pair<A, B> {
     }
 
     public boolean contains(Object object) {
-        return object.equals(first) || object.equals(second);
+        return object == first || object == second;
     }
 
     public A getFirst() {

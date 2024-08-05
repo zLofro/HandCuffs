@@ -11,6 +11,8 @@
     "server.entity.PlayerEntityMixin",
     "server.entity.ServerPlayerEntityMixin",
     "server.inventory.PlayerInventoryMixin",
+    ,
+    "server.item.LeadItemMixin"
   ],
   "client": [
     "client.MinecraftMixin",

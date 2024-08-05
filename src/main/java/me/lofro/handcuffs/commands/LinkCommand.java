@@ -36,7 +36,6 @@ public class LinkCommand {
             return 0;
         }
 
-
         Map<UUID, UUID> linkedList = LinkManager.linkedPlayers;
 
         if (linkedList.containsKey(firstPlayer.getUniqueID()) || linkedList.containsValue(firstPlayer.getUniqueID()) || linkedList.containsKey(secondPlayer.getUniqueID()) || linkedList.containsValue(secondPlayer.getUniqueID())) {
@@ -46,7 +45,7 @@ public class LinkCommand {
 
         source.sendFeedback(new StringTextComponent("Has linkeado a los jugadores."), false);
 
-        LinkManager.link(firstPlayer, secondPlayer);
+        LinkManager.link(firstPlayer.getUniqueID(), secondPlayer.getUniqueID());
 
         return Command.SINGLE_SUCCESS;
     }
@@ -59,13 +58,13 @@ public class LinkCommand {
 
         Map<UUID, UUID> linkedList = LinkManager.linkedPlayers;
 
-        if (!(linkedList.containsKey(playerEntity.getUniqueID()) || linkedList.containsKey(playerEntity.getUniqueID()))) {
+        if (!(linkedList.containsKey(playerEntity.getUniqueID()) || linkedList.containsValue(playerEntity.getUniqueID()))) {
             source.sendFeedback(new StringTextComponent("El jugador no está linkeado."), false);
 
             return 0;
         }
 
-        LinkManager.unLink(playerEntity);
+        LinkManager.unLink(playerEntity.getUniqueID());
 
         source.sendFeedback(new StringTextComponent("Has deslinkeado al jugador."), false);
 

@@ -1,11 +1,19 @@
 package me.lofro.handcuffs.items;
 
+import me.lofro.handcuffs.Main;
 import me.lofro.handcuffs.items.client.HandcuffItemRenderer;
 import me.lofro.handcuffs.link.LinkManager;
 import me.lofro.handcuffs.utils.Pair;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
@@ -27,7 +35,7 @@ public class HandcuffsItem extends Item implements IAnimatable {
 
     public final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
-    @Unique public Pair<UUID, UUID> interacted = new Pair<>();
+    @Unique public Pair<UUID, UUID> interacted;
 
     public HandcuffsItem() {
         super(new Properties().setISTER(() -> new Callable() {
@@ -38,6 +46,38 @@ public class HandcuffsItem extends Item implements IAnimatable {
                 return this.renderer;
             }
         }));
+
+        this.interacted = new Pair<>();
+    }
+
+    @Override
+    public ActionResultType itemInteractionForEntity(ItemStack itemStack, PlayerEntity player, LivingEntity clickedEntity, Hand p_111207_4_) {
+        if (!(clickedEntity instanceof ServerPlayerEntity)) {
+            return ActionResultType.PASS;
+        }
+
+        ServerPlayerEntity clickedPlayer = (ServerPlayerEntity) clickedEntity;
+
+        if (clickedPlayer.getItemStackFromSlot(EquipmentSlotType.OFFHAND).getItem().equals(ModItems.HANDCUFFS.get())) {
+            if (player.isSneaking()) {
+
+                Map<UUID, UUID> linkedList = LinkManager.linkedPlayers;
+
+                if (interacted.contains(clickedPlayer.getUniqueID())) {
+                    removeInteracted(clickedPlayer.getUniqueID());
+                    return ActionResultType.PASS;
+                }
+
+                if (linkedList.containsKey(clickedPlayer.getUniqueID()) || linkedList.containsValue(clickedPlayer.getUniqueID())) {
+                    LinkManager.unLink(clickedPlayer, clickedPlayer.getEntityWorld());
+
+                    return ActionResultType.PASS;
+                }
+
+                addInteracted(clickedPlayer.getUniqueID(), player.getEntityWorld());
+            }
+        }
+        return ActionResultType.SUCCESS;
     }
 
     @Override
@@ -57,6 +97,7 @@ public class HandcuffsItem extends Item implements IAnimatable {
     }
 
     public void addInteracted(UUID uuid, World world) {
+        Main.LOGGER.info("ADDS INTERACTED");
         if (interacted.getFirst() == null && !(interacted.getSecond() == uuid)) {
             interacted.setFirst(uuid);
         } else if (interacted.getSecond() == null && !(interacted.getFirst() == uuid)) {
@@ -71,9 +112,10 @@ public class HandcuffsItem extends Item implements IAnimatable {
                 PlayerEntity firstPlayer = world.getPlayerByUuid(interacted.getFirst());
                 PlayerEntity secondPlayer = world.getPlayerByUuid(interacted.getSecond());
 
-                if (firstPlayer == null || secondPlayer == null) return;
-
-                LinkManager.link(firstPlayer, secondPlayer);
+                if (firstPlayer != null && secondPlayer != null) {
+                    Main.LOGGER.info("LINKS");
+                    LinkManager.link(firstPlayer, secondPlayer);
+                }
             }
             interacted.setFirst(null);
             interacted.setSecond(null);

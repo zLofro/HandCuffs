@@ -14,13 +14,5 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(PlayerInventory.class)
 public abstract class PlayerInventoryMixin {
 
-    @Shadow public abstract ItemStack getStackInSlot(int p_70301_1_);
-
-    @Inject(method = "removeStackFromSlot", at = @At("HEAD"), cancellable = true)
-    private void cancelRemoveStackFromSlot(int p_70304_1_, CallbackInfoReturnable<ItemStack> cir) {
-        if (ModItems.HANDCUFFS.get().equals(getStackInSlot(EquipmentSlotType.OFFHAND.getSlotIndex()).getItem())) {
-            cir.setReturnValue(ItemStack.EMPTY);
-        }
-    }
 
 }

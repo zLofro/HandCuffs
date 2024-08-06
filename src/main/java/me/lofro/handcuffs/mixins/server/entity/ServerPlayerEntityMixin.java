@@ -9,10 +9,12 @@ import me.lofro.handcuffs.networking.packets.MovePlayerS2C;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerInteractionManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import org.spongepowered.asm.mixin.Mixin;
@@ -42,14 +44,11 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         }
     }
 
-    @Inject(method = "<init>", at = @At("TAIL"))
-    private void modifyConstructor(MinecraftServer p_i45285_1_, ServerWorld p_i45285_2_, GameProfile p_i45285_3_, PlayerInteractionManager p_i45285_4_, CallbackInfo ci) {
-        LinkManager.linkedPlayers.forEach((key, value) -> ModPacketHandler.sendToAllClients(new LinkPlayersS2C(true, key, value)));
-    }
-
-    @Inject(method = "disconnect", at = @At("TAIL"))
+    @Inject(method = "disconnect", at = @At("HEAD"))
     private void modifyDisconnect(CallbackInfo ci) {
-        LinkManager.linkedPlayers.forEach((key, value) -> ModPacketHandler.sendToAllClients(new LinkPlayersS2C(false, key, value)));
+        if (LinkManager.linkedPlayers.containsValue(getUniqueID()) || LinkManager.linkedPlayers.containsKey(getUniqueID())) {
+            ModPacketHandler.sendToAllClients(new LinkPlayersS2C(false, getUniqueID(), LinkManager.linkedPlayers.get(getUniqueID())));
+        }
     }
 
     @Inject(method = "tick", at = @At("TAIL"))

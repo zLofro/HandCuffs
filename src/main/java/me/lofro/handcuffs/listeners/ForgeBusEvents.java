@@ -1,7 +1,6 @@
 package me.lofro.handcuffs.listeners;
 
 import me.lofro.handcuffs.Main;
-import me.lofro.handcuffs.accessors.item.LeadItemAccessor;
 import me.lofro.handcuffs.items.HandcuffsItem;
 import me.lofro.handcuffs.items.ModItems;
 import me.lofro.handcuffs.link.LinkManager;
@@ -36,19 +35,42 @@ public class ForgeBusEvents {
         Entity clickedEntity = event.getTarget();
 
         if (item instanceof HandcuffsItem) {
-            if (clickedEntity instanceof ServerPlayerEntity) {
-                ServerPlayerEntity clickedPlayer = (ServerPlayerEntity) clickedEntity;
+            if (clickedEntity instanceof PlayerEntity) {
+                PlayerEntity clickedPlayer = (PlayerEntity) clickedEntity;
 
                 if (ModItems.HANDCUFFS.get().equals(clickedPlayer.getHeldItemOffhand().getItem())) {
+                    if (player.isSneaking()) {
+                        HandcuffsItem handcuffsItem = (HandcuffsItem) clickedPlayer.getHeldItemOffhand().getItem();
+
+                        Pair<UUID, UUID> interacted = handcuffsItem.getInteracted();
+                        Map<UUID, UUID> linkedList = LinkManager.linkedPlayers;
+
+                        if (interacted.contains(clickedPlayer.getUniqueID())) {
+                            handcuffsItem.removeInteracted(clickedPlayer.getUniqueID());
+                            return;
+                        }
+
+                        if (linkedList.containsKey(clickedPlayer.getUniqueID()) || linkedList.containsValue(clickedPlayer.getUniqueID())) {
+                            LinkManager.unLink(clickedPlayer, clickedPlayer.getEntityWorld());
+
+                            return;
+                        }
+
+                        handcuffsItem.addInteracted(clickedPlayer.getUniqueID(), player.getEntityWorld());
+                    }
                     return;
                 }
 
-                clickedPlayer.setItemStackToSlot(EquipmentSlotType.OFFHAND, event.getItemStack().copy());
+                ItemStack offhandHandCuffs = new ItemStack(ModItems.HANDCUFFS.get());
+
+                clickedPlayer.setItemStackToSlot(EquipmentSlotType.OFFHAND, offhandHandCuffs);
 
                 if (player.getItemStackFromSlot(EquipmentSlotType.MAINHAND).getItem() instanceof HandcuffsItem) {
-                    player.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(Items.AIR));
+                    ItemStack mainHandItemstack = player.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
+                    mainHandItemstack.setCount(mainHandItemstack.getCount() - 1);
                 } else if (player.getItemStackFromSlot(EquipmentSlotType.OFFHAND).getItem() instanceof HandcuffsItem) {
-                    player.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.AIR));
+                    ItemStack offHandItemstack = player.getItemStackFromSlot(EquipmentSlotType.OFFHAND);
+                    offHandItemstack.setCount(offHandItemstack.getCount() - 1);
                 }
             }
         }
@@ -62,26 +84,6 @@ public class ForgeBusEvents {
                     clickedPlayer.setItemStackToSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.AIR));
 
                     player.addItemStackToInventory(new ItemStack(ModItems.HANDCUFFS.get()));
-                }
-            } else if (Items.LEAD.equals(item)) {
-                if (ModItems.HANDCUFFS.get().equals(clickedPlayer.getItemStackFromSlot(EquipmentSlotType.OFFHAND).getItem())) {
-                    LeadItemAccessor leadItemAccessor = (LeadItemAccessor) item;
-
-                    Pair<UUID, UUID> interacted = leadItemAccessor.getInteracted$0();
-                    Map<UUID, UUID> linkedList = LinkManager.linkedPlayers;
-
-                    if (interacted.contains(clickedPlayer.getUniqueID())) {
-                        leadItemAccessor.removeInteracted$0(clickedPlayer.getUniqueID());
-                        return;
-                    }
-
-                    if (linkedList.containsKey(clickedPlayer.getUniqueID()) || linkedList.containsValue(clickedPlayer.getUniqueID())) {
-                        LinkManager.unLink(clickedPlayer, clickedPlayer.getEntityWorld());
-
-                        return;
-                    }
-
-                    leadItemAccessor.addInteracted$0(clickedPlayer.getUniqueID(), player.getEntityWorld());
                 }
             }
         }

@@ -1,20 +1,26 @@
 package me.lofro.handcuffs.mixins.server;
 
 import me.lofro.handcuffs.link.LinkManager;
-import me.lofro.handcuffs.networking.ModPacketHandler;
-import me.lofro.handcuffs.networking.packets.LinkPlayersS2C;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.management.PlayerList;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import javax.annotation.Nullable;
+
 @Mixin(MinecraftServer.class)
-public class MinecraftServerMixin {
+public abstract class MinecraftServerMixin {
+
+    @Shadow public abstract PlayerList getPlayerList();
+
+    @Shadow public abstract String getServerOwner();
 
     @Inject(method = "stopServer", at = @At("HEAD"))
     private void modifyStop(CallbackInfo ci) {
-        LinkManager.linkedPlayers.forEach((key, value) -> ModPacketHandler.sendToAllClients(new LinkPlayersS2C(false, key, value)));
+        LinkManager.linkedPlayers.clear();
     }
 
 }

@@ -112,7 +112,6 @@ public class HandcuffsItem extends Item implements IAnimatable {
                 PlayerEntity secondPlayer = world.getPlayerByUuid(interacted.getSecond());
 
                 if (firstPlayer != null && secondPlayer != null) {
-                    Main.LOGGER.info("LINKS");
                     LinkManager.link(firstPlayer, secondPlayer);
                 }
             }

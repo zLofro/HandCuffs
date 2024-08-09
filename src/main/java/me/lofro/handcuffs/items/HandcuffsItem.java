@@ -97,7 +97,6 @@ public class HandcuffsItem extends Item implements IAnimatable {
     }
 
     public void addInteracted(UUID uuid, World world) {
-        Main.LOGGER.info("ADDS INTERACTED");
         if (interacted.getFirst() == null && !(interacted.getSecond() == uuid)) {
             interacted.setFirst(uuid);
         } else if (interacted.getSecond() == null && !(interacted.getFirst() == uuid)) {
@@ -113,7 +112,6 @@ public class HandcuffsItem extends Item implements IAnimatable {
                 PlayerEntity secondPlayer = world.getPlayerByUuid(interacted.getSecond());
 
                 if (firstPlayer != null && secondPlayer != null) {
-                    Main.LOGGER.info("LINKS");
                     LinkManager.link(firstPlayer, secondPlayer);
                 }
             }
